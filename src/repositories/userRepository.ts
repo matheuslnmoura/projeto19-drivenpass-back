@@ -6,6 +6,18 @@ export async function findByEmail(email: string) {
   });
 }
 
+export async function findById(id: number) {
+  return await db.user.findUnique({
+    where: { id }, 
+    select: {
+      id: true,
+      email: true,
+      password: false
+    }
+    
+  });
+}
+
 export async function createUser(email: string, password: string) {
   const result = await db.user.create({
     data: {
