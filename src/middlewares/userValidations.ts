@@ -2,18 +2,18 @@ import joi from 'joi';
 import  { Request, Response, NextFunction}  from 'express';
 import chalk from 'chalk';
 
-export function validateSignUpInfo(req: Request, res: Response, next: NextFunction) {
-  const signUpInfo = req.body;
-  const signUpInfoSchema = joi.object({
+export function validateUserInfo(req: Request, res: Response, next: NextFunction) {
+  const userInfo = req.body;
+  const userInfoSchema = joi.object({
     email: joi.string().email().required(),
     password: joi.string().min(10).required()
   });
 
-  const { error } = signUpInfoSchema.validate(signUpInfo, {abortEarly: false});
+  const { error } = userInfoSchema.validate(userInfo, {abortEarly: false});
 
   if(error) {
     console.log(chalk.bold.red(error));
-    return res.sendStatus(422);
+    throw{code: 422, message: error.message};
   }
 
   next();
