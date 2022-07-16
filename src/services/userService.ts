@@ -2,6 +2,12 @@
 import { createUser } from '../repositories/userRepository.js';
 import { checkEmailOnDatabase, createPasswordHash, createToken, validatePassword } from '../utils/userUtils.js';
 
+export type userData = {
+  id: number;
+  email: string;
+  password: string
+}
+
 export async function signUpService(email: string, password: string) {
   const user = await checkEmailOnDatabase(email);
   if(user) {
