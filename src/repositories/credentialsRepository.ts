@@ -39,3 +39,11 @@ export async function insertCredential(credentialInfo: credentialsType, userId: 
     }
   });
 }
+
+export async function deleteCredentialById(credentialId: number) {
+  return await db.credentials.delete({
+    where:{
+      id: credentialId
+    }
+  });
+}

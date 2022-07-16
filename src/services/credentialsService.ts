@@ -1,6 +1,6 @@
 
 import { Credentials } from '@prisma/client';
-import { getCredentialByIdAndUserId, getCredentialsByTitleAndUserId, getUserCredentials, insertCredential} from '../repositories/credentialsRepository.js';
+import { deleteCredentialById, getCredentialByIdAndUserId, getCredentialsByTitleAndUserId, getUserCredentials, insertCredential} from '../repositories/credentialsRepository.js';
 import { decryptPassword, encryptPassword } from '../utils/encryptionUtils.js';
 import { userData } from './userService.js';
 
@@ -77,4 +77,11 @@ async function checkIfCredentialIsFromUser(credentialId: number, userId:number) 
     throw { code: 404, message: 'Credential not found'};
   }
   return credential;
+}
+
+export async function deleteCredentialByIdService(credentialIdString: string, userId:number) { 
+  const credentialId = parseInt(credentialIdString);
+  await checkIfCredentialIsFromUser(credentialId, userId);
+  const deleteResponse = await deleteCredentialById(credentialId);
+  return deleteResponse.title;
 }
