@@ -27,4 +27,6 @@ model Credentials {
   password String
   ownerId User @relation(fields: [userId], references: [id])
   userId Int
+
+  @@map("credentials")
 }

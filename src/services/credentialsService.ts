@@ -1,5 +1,6 @@
 
-import { getCredentialsByTitleAndUserId, insertCredential} from '../repositories/credentialsRepository.js';
+import { Credentials } from '@prisma/client';
+import { getCredentialsByTitleAndUserId, getUserCredentials, insertCredential} from '../repositories/credentialsRepository.js';
 import { decryptPassword, encryptPassword } from '../utils/encryptionUtils.js';
 import { userData } from './userService.js';
 
@@ -10,7 +11,8 @@ export type credentialsType =  {
   password: string
 }
 
-export async function credentialServices(credentialsInfo: credentialsType, userInfo: userData) {
+
+export async function postcredentialService(credentialsInfo: credentialsType, userInfo: userData) {
   const { title, password } = credentialsInfo;
   const {id: userId} = userInfo;
 
@@ -40,4 +42,22 @@ async function checkIfTitleUnique(title: string, userId: number) {
     throw {code: 401, message: 'Credential title should be unique. Choose a different title'};
   }
   return;
+}
+
+export async function getCredentialsService(userId: number) {
+  const credentials = await getUserCredentials(userId);
+  if(!credentials) {
+    throw {code: 500, message: 'Could not get your credentials. Please try again'};
+  }
+  const decryptedCredentials: Credentials[] = await decryptCredentialsArray(credentials);
+  return decryptedCredentials;
+}
+
+async function decryptCredentialsArray(credentials: Credentials[]) {
+  return credentials.map((credential)=>{
+    const {password: cryptedPassword} = credential;
+    const decryptedPassword = decryptPassword(cryptedPassword);
+    delete credential.userId;
+    return { ... credential, password: decryptedPassword };
+  });
 }

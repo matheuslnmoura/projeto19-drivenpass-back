@@ -11,6 +11,12 @@ export async function getCredentialsByTitleAndUserId(title: string, userId: numb
   });
 }
 
+export async function getUserCredentials(userId: number) {
+  return await db.credentials.findMany({
+    where: {userId}
+  });
+}
+
 export async function insertCredential(credentialInfo: credentialsType, userId: number){
   const { title, url, user, password } = credentialInfo;
 
