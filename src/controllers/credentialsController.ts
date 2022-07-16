@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { getCredentialsService, postcredentialService } from '../services/credentialsService.js';
+import { getCredentialByIdService, getCredentialsService, postcredentialService } from '../services/credentialsService.js';
 
 export async function postCredential(req: Request, res: Response) {
   const user = res.locals.user;
@@ -17,7 +17,8 @@ export async function getCredentials(req: Request, res: Response) {
 
 export async function getCredentialById(req:Request, res: Response) {
   const user = res.locals.user;
+  const {id: userId} = user;
   const {id: credentialId} = req.params;
-  console.log(user);
-  console.log(credentialId);
+  const credential = await getCredentialByIdService(credentialId, userId);
+  res.status(200).send(credential);
 }

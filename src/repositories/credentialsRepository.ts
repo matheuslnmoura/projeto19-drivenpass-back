@@ -17,6 +17,15 @@ export async function getUserCredentials(userId: number) {
   });
 }
 
+export async function getCredentialByIdAndUserId(credentialId: number, userId: number) {
+  return await db.credentials.findFirst({
+    where:{
+      id: credentialId,
+      userId
+    }
+  });
+}
+
 export async function insertCredential(credentialInfo: credentialsType, userId: number){
   const { title, url, user, password } = credentialInfo;
 
