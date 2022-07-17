@@ -1,4 +1,4 @@
-import { getNoteByIdAndUserId, getNoteByTitleAndUserId, getNotesByUserId, insertNote } from '../repositories/notesRepository.js';
+import { deleteNoteById, getNoteByIdAndUserId, getNoteByTitleAndUserId, getNotesByUserId, insertNote } from '../repositories/notesRepository.js';
 
 export type NoteData = {
   title: string;
@@ -40,4 +40,11 @@ async function checkIfNoteIsFromUser(noteId: number, userId: number) {
     throw{ code: 404, message: 'Note not found'};
   }
   return note;
+}
+
+export async function deleteNoteByIdService(noteIdString: string, userId: number) {
+  const noteId = parseInt(noteIdString);
+  await checkIfNoteIsFromUser(noteId, userId);
+  const deletedNote = await deleteNoteById(noteId);
+  return deletedNote;
 }

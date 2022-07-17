@@ -38,3 +38,11 @@ export async function insertNote(noteInfo: NoteData, userId: number) {
     }
   });
 }
+
+export async function deleteNoteById(noteId: number) {
+  return await db.notes.delete({
+    where: {
+      id: noteId,
+    }
+  });
+}
