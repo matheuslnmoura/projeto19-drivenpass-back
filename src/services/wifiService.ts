@@ -1,5 +1,5 @@
 import { Wifis } from '@prisma/client';
-import { getWifisByUserId, insertWifi } from '../repositories/wifiRepository.js';
+import { getWifiByIdAndUserId, getWifisByUserId, insertWifi } from '../repositories/wifiRepository.js';
 import { decryptPassword, encryptPassword } from '../utils/encryptionUtils.js';
 
 
@@ -24,6 +24,26 @@ export async function getWifisService(userId: number) {
   const encryptedWifis = await getWifisByUserId(userId);
   const decryptedWifis = decryptWifis(encryptedWifis);
   return decryptedWifis;
+}
+
+export async function getWifiByIdService(wifiIdString: string, userId: number) {
+  const wifiId = parseInt(wifiIdString);
+  const wifi = await checkIfWifiIsFromUser(wifiId, userId);
+  const {password} = wifi;
+  const decryptedPassword = decryptPassword(password);
+  const decryptedWifi = {
+    ...wifi, 
+    password: decryptedPassword
+  };
+  return decryptedWifi;
+}
+
+async function checkIfWifiIsFromUser(wifiId: number, userId: number) {
+  const wifi = await getWifiByIdAndUserId(wifiId, userId);
+  if(!wifi) {
+    throw { code: 404, message: 'Wifi not found'};
+  }
+  return wifi;
 }
 
 function decryptWifis(encryptedWifis: Wifis[]) {
