@@ -1,5 +1,6 @@
-import { getCardByTitleAndUserId, insertCard } from '../repositories/cardRepository.js';
-import { encryptPassword } from '../utils/encryptionUtils.js';
+import { Cards } from '@prisma/client';
+import { getCardByIdAndUserId, getCardByTitleAndUserId, getCardsByUserId, insertCard } from '../repositories/cardRepository.js';
+import { decryptPassword, encryptPassword } from '../utils/encryptionUtils.js';
 
 export type cardData = {
   title: string;
@@ -32,4 +33,48 @@ async function checkIfCardTitleUnique(title: string, userId: number) {
     throw {code: 401, message: 'Card title should be unique. Choose a different title'};
   }
   return;
+}
+
+export async function getCardsService(userId: number) {
+  const encryptedCards = await getCardsByUserId(userId);
+  const decryptedInfos = decryptInfos(encryptedCards);
+  return decryptedInfos;
+}
+
+export async function getCardByIdService(cardIdString: string, userId: number) {
+  const cardId = parseInt(cardIdString);
+  const encryptedCard = await checkIfCardIsFromUser(cardId, userId);
+  const {password, securityCode} = encryptedCard;
+  const decryptedPassword = decryptPassword(password);
+  const decryptedSecurityCode = decryptPassword(securityCode);
+  const decryptedCard = {
+    ...encryptedCard,
+    password: decryptedPassword,
+    securityCode: decryptedSecurityCode
+  };
+  return decryptedCard;
+}
+
+async function checkIfCardIsFromUser(cardId: number, userId: number) {
+  const card = await getCardByIdAndUserId(cardId, userId);
+  if(!card) {
+    throw { code: 404, message: 'Card not found'};
+  }
+  return card;
+}
+
+function decryptInfos(encryptedCards: Cards[]) {
+  return encryptedCards.map(encryptedCard => {
+    const{password, securityCode} = encryptedCard;
+    const decryptedPassword = decryptPassword(password);
+    const decryptedSecurityCode = decryptPassword(securityCode);
+    const decryptedCard = {
+      ...encryptedCard,
+      password: decryptedPassword,
+      securityCode: decryptedSecurityCode
+
+    };
+
+    return decryptedCard;
+  });
 }

@@ -2,10 +2,25 @@ import db from '../config/database.js';
 
 import { cardData } from '../services/cardsService.js';
 
+export async function getCardsByUserId(userId: number) {
+  return await db.cards.findMany({
+    where: {userId}
+  });
+}
+
 export async function getCardByTitleAndUserId(title: string, userId: number) {
   return await db.cards.findFirst({
     where:{
       title, 
+      userId
+    }
+  });
+}
+
+export async function getCardByIdAndUserId(cardId: number, userId: number) {
+  return await db.cards.findFirst({
+    where:{
+      id: cardId,
       userId
     }
   });

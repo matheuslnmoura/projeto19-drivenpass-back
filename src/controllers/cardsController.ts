@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import { createCardService } from '../services/cardsService.js';
+import { createCardService, getCardByIdService, getCardsService } from '../services/cardsService.js';
 
 export async function createCardController(req: Request, res: Response) {
   const {id: userId} = res.locals.user;
@@ -9,4 +9,23 @@ export async function createCardController(req: Request, res: Response) {
     throw{ code: 500, message: 'Could not insert card info. Please try again'};
   }
   res.status(201).send(createdCard);
+}
+
+export async function getCardsController(req: Request, res: Response) {
+  const {id: userId} = res.locals.user;
+  const cards = await getCardsService(userId);
+  if(!cards) {
+    throw { code: 500, mesage: 'Could not retrieve cards. Please try again'};
+  }
+  res.status(200).send(cards);
+}
+
+export async function getCardByIdController(req: Request, res: Response) {
+  const {id: userId} = res.locals.user;
+  const {id: cardId} = req.params;
+  const card = await getCardByIdService(cardId, userId);
+  if(!card) {
+    throw {code: 500, message: 'Could not retrieve card. Please try again'};
+  }
+  res.status(200).send(card);
 }
