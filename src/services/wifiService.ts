@@ -1,5 +1,5 @@
 import { Wifis } from '@prisma/client';
-import { getWifiByIdAndUserId, getWifisByUserId, insertWifi } from '../repositories/wifiRepository.js';
+import { deleteWifiById, getWifiByIdAndUserId, getWifisByUserId, insertWifi } from '../repositories/wifiRepository.js';
 import { decryptPassword, encryptPassword } from '../utils/encryptionUtils.js';
 
 
@@ -56,4 +56,17 @@ function decryptWifis(encryptedWifis: Wifis[]) {
     };
     return decryptedWifi;
   });
+}
+
+export async function deleteWifiByIdService(wifiIdString: string, userId: number) {
+  const wifiId = parseInt(wifiIdString);
+  const wifi = await checkIfWifiIsFromUser(wifiId, userId);
+  const deletedWifi = await deleteWifiById(wifiId);
+  const {password} = deletedWifi;
+  const decryptedPassword = decryptPassword(password);
+  const decryptedDeletedWifi = {
+    ...deletedWifi, 
+    password: decryptedPassword
+  };
+  return decryptedDeletedWifi;
 }

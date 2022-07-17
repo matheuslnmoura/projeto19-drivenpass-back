@@ -29,3 +29,9 @@ export async function insertWifi(wifiInfo: wifiData, userId: number) {
     }
   });
 }
+
+export async function deleteWifiById(wifiId: number) {
+  return await db.wifis.delete({
+    where:{id: wifiId}
+  });
+}
