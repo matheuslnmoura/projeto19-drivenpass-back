@@ -42,3 +42,9 @@ export async function insertCard(cardInfo: cardData, userId: number) {
     }
   });
 }
+
+export async function deleteCardById(cardId: number) {
+  return await db.cards.delete({
+    where:{id: cardId}
+  });
+}

@@ -1,5 +1,5 @@
 import { Cards } from '@prisma/client';
-import { getCardByIdAndUserId, getCardByTitleAndUserId, getCardsByUserId, insertCard } from '../repositories/cardRepository.js';
+import { deleteCardById, getCardByIdAndUserId, getCardByTitleAndUserId, getCardsByUserId, insertCard } from '../repositories/cardRepository.js';
 import { decryptPassword, encryptPassword } from '../utils/encryptionUtils.js';
 
 export type cardData = {
@@ -53,6 +53,13 @@ export async function getCardByIdService(cardIdString: string, userId: number) {
     securityCode: decryptedSecurityCode
   };
   return decryptedCard;
+}
+
+export async function deleteCardByIdService (cardIdString: string, userId: number) {
+  const cardId = parseInt(cardIdString);
+  await checkIfCardIsFromUser(cardId, userId);
+  const deletedCard = await deleteCardById(cardId);
+  return deletedCard;
 }
 
 async function checkIfCardIsFromUser(cardId: number, userId: number) {

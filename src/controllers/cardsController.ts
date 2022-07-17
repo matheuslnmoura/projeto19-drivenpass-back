@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import { createCardService, getCardByIdService, getCardsService } from '../services/cardsService.js';
+import { createCardService, deleteCardByIdService, getCardByIdService, getCardsService } from '../services/cardsService.js';
 
 export async function createCardController(req: Request, res: Response) {
   const {id: userId} = res.locals.user;
@@ -28,4 +28,14 @@ export async function getCardByIdController(req: Request, res: Response) {
     throw {code: 500, message: 'Could not retrieve card. Please try again'};
   }
   res.status(200).send(card);
+}
+
+export async function deleteCardById( req: Request, res: Response ) {
+  const {id: userId} = res.locals.user;
+  const {id: cardId} = req.params;
+  const deletedCard = await deleteCardByIdService(cardId, userId);
+  if(!deletedCard) {
+    throw {code: 500, message: 'Could not retrieve card. Please try again'};
+  }
+  res.status(200).send(deletedCard);
 }
