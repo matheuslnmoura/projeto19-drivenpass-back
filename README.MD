@@ -12,7 +12,7 @@
 
 Esta é uma API de armazenamento e gerenciamento de senhas e informações confidenciais.
 
-## Database deploy link
+## Backend deploy link
 
 https://back-drivenpass.herokuapp.com/
 
@@ -31,27 +31,27 @@ $ npm run dev
 ## API:
 
 ```
-# Rotas de autenticação:
+# Authentication Routes:
 
 - POST /sign-up
-    - Rota para cadastrar um usuário (Senha de no mínimo 10 caracteres)
+    - Route for the creation of new users (password must have a minimum length of 10 characters)
     - headers: {}
     - body: {
         "email": "email@email.com",
         "password": "somepassword"
     }
 - POST /sign-in
-    - Rota para o usuário logar e receber um token através do corpo da resposta
+    - Route where registred users can Login and receive an authentication Token throught the response body
     - headers: {}
     - body: {
         "email": "email@email.com",
         "password": "somepassword"
     }
     
-# Rotas de credenciais:
+# Credentials Routes:
 
 - POST /create-credential
-    - Rota para o usuário registrar uma credencial
+    - Route where the User registers a credential 
     - headers: {
         "Authorization": "Bearer token"
     }
@@ -61,29 +61,32 @@ $ npm run dev
         "user": "Some User Name",
         "password": "somepassword"
     }
+    
 - GET /credentials
-    - Rota para o usuário resgatar todas as suas credenciais criadas através do corpo da resposta
-    - headers: {
-        "Authorization": "Bearer token"
-    }
-    - body: {}
-- GET /credentials/:id
-    - Rota para o usuário resgatar uma credencial específica informada pelo params "id" através do corpo da resposta
-    - headers: {
-        "Authorization": "Bearer token"
-    }
-    - body: {}
-- DELETE /delete-credential/:id
-    - Rota para o usuário deletar uma credencial específica informada pelo params "id"
+    - Route where the user gets on the response body all of its credentials  
     - headers: {
         "Authorization": "Bearer token"
     }
     - body: {}
     
-# Rotas de notas seguras:
+- GET /credentials/:id
+    - Route where the user gets on the response body a specific credential addressed by the "id" parameter
+    - headers: {
+        "Authorization": "Bearer token"
+    }
+    - body: {}
+    
+- DELETE /delete-credential/:id
+    - Route where the user is able to delete a specific credential addressed by the "id" parameter
+    - headers: {
+        "Authorization": "Bearer token"
+    }
+    - body: {}
+    
+# Secured Noted Routes:
 
 - POST /create-note
-    - Rota para o usuário registrar uma nota segura ("title" máx 50 char. e "note" máx 1000 char.)
+    - Route where the user can register an secure note. ("title" must have up to 50 char. "note"  must have up to 1000 char)
     - headers: {
         "Authorization": "Bearer token"
     }
@@ -91,20 +94,23 @@ $ npm run dev
         "title": "Some Title",
         "note": "Some Note"
     }
+    
 - GET /notes
-    - Rota para o usuário resgatar todas as suas notas seguras criadas através do corpo da resposta
+    - Route where the user gets on the response body all of its secured notes    
     - headers: {
         "Authorization": "Bearer token"
     }
     - body: {}
+    
 - GET /notes/:id
-    - Rota para o usuário resgatar uma nota segura específica informada pelo params "id" através do corpo da resposta
+    - Route where the user gets on the response body a specific secured note addressed by the "id" parameter
     - headers: {
         "Authorization": "Bearer token"
     }
     - body: {}
+    
 - DELETE /delete-note/:id
-    - Rota para o usuário deletar uma nota segura específica informada pelo params "id"
+    - Route where the user is able to delete a specific secured note addressed by the "id" parameter
     - headers: {
         "Authorization": "Bearer token"
     }
@@ -113,7 +119,7 @@ $ npm run dev
 # Rotas de cartões:
 
 - POST /create-card
-    - Rota para o usuário registrar um cartão ("type": credit, debit ou both)
+    - Route where the user can register a card("type": "credit", "debit" or "credit and debit")
     - headers: {
         "Authorization": "Bearer token"
     }
@@ -125,31 +131,34 @@ $ npm run dev
         "expirationDate": "10/27",
         "password": "1234",
         "isVirtual": false,
-        "type": "both"
+        "type": "credit and debit"
     }
+    
 - GET /cards
-    - Rota para o usuário resgatar todas os seus cartões criados através do corpo da resposta
-    - headers: {
-        "Authorization": "Bearer token"
-    }
-    - body: {}
-- GET /cards/:id
-    - Rota para o usuário resgatar um cartão específico informado pelo params "id" através do corpo da resposta
-    - headers: {
-        "Authorization": "Bearer token"
-    }
-    - body: {}
-- DELETE /delete-card/:id
-    - Rota para o usuário deletar um cartão específico informado pelo params "id"
+    - Route where the user gets on the response body all of its cards    
     - headers: {
         "Authorization": "Bearer token"
     }
     - body: {}
     
-# Rotas de wi-fi:
+- GET /cards/:id
+    - Route where the user gets on the response body a specific card addressed by the "id" parameter
+    - headers: {
+        "Authorization": "Bearer token"
+    }
+    - body: {}
+    
+- DELETE /delete-card/:id
+    - Route where the user is able to delete a specific card addressed by the "id" parameter
+    - headers: {
+        "Authorization": "Bearer token"
+    }
+    - body: {}
+    
+# Wifi routes:
 
 - POST /create-wifi
-    - Rota para o usuário registrar uma wi-fi
+    - Route where the user can register a wi-fi network
     - headers: {
         "Authorization": "Bearer token"
     }
@@ -158,20 +167,23 @@ $ npm run dev
         "name": "Some Name",
         "password": "somepassword"
     }
+    
 - GET /wifis
-    - Rota para o usuário resgatar todas as suas wi-fis criadas através do corpo da resposta
+    - Route where the user gets on the response body all of its wi-fis    
     - headers: {
         "Authorization": "Bearer token"
     }
     - body: {}
+    
 - GET /wifis/:id
-    - Rota para o usuário resgatar uma wi-fi específica informada pelo params "id" através do corpo da resposta
+    - Route where the user gets on the response body a specific wi-fi addressed by the "id" parameter
     - headers: {
         "Authorization": "Bearer token"
     }
     - body: {}
+    
 - DELETE /delete-wifi/:id
-    - Rota para o usuário deletar uma wi-fi específica informada pelo params "id"
+    - Route where the user is able to delete a specific wi-fi addressed by the "id" parameter
     - headers: {
         "Authorization": "Bearer token"
     }
